@@ -15,14 +15,16 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 class EditProfile(FlaskForm):
-    note = StringField("Note", validators=[DataRequired(), Length(min=5)])
-    submit = SubmitField("Update Note")
+    username = StringField("Username", validators=[DataRequired(), Length(min = 4, max = 8)])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min = 1)])
+    bio = StringField("Bio")
+    submit = SubmitField("Update Profile")
 
 class CreatePost(FlaskForm):
-    note = StringField("Username", validators= [DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min = 4)])
-    submit = SubmitField("Add Note")
+    post = StringField("Post", validators=[DataRequired()])
+    caption = StringField("Caption")
+    submit = SubmitField("Upload Post")
     
 class EditPost(FlaskForm):
-    note = StringField("Note", validators=[DataRequired(), Length(min=5)])
+    caption = StringField("New Caption")    
     submit = SubmitField("Update Note")
