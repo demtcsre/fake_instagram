@@ -15,8 +15,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 class EditProfile(FlaskForm):
-    username = StringField("Username")
-    password = PasswordField("Password")
+    username = StringField("Username", validators=[DataRequired(), Length(min = 4)])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min = 8)])
     profile_pic = StringField("Bio")
     bio = StringField("Bio")
     submit = SubmitField("Update Profile")
