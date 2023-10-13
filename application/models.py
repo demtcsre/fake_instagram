@@ -1,7 +1,8 @@
 from app import db
 from datetime import datetime
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(128), nullable = False)
@@ -12,11 +13,16 @@ class User(db.Model):
     bio = db.Column(db.String(128))
     join_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow())
     status = db.Column(db.Boolean(), default=True)
+    follower_users = db.relationship("Relation", foreign_keys = "Relation.follower_id", backref = "follower", lazy=True)
+    following_users = db.relationship("Relation", foreign_keys = "Relation.following_id", backref = "following", lazy=True)
+    posts = db.relationship("Post", backref="post_owner", lazy=True)
+    likes = db.relationship("Like", backref = "like_owner", lazy=True)
+    comments = db.relationship("Comment", backref = "comment_owner", lazy=True)
     
 class Relation(db.Model):
     __tablename__ = "relations"
     id = db.Column(db.Integer, primary_key = True)
-    followed_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+    follower_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
     following_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
     status = db.Column(db.String(256), nullable = False)
     relation_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow())
@@ -29,6 +35,8 @@ class Post(db.Model):
     caption = db.Column(db.String(256), default="")
     status = db.Column(db.Boolean(), default=True)
     post_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow())
+    comments = db.relationship("Comment", backref="commented", lazy=True)
+    likes = db.relationship("Like", backref="liked", lazy=True)
 
 class Comment(db.Model):
     __tablename__ = "comments"
