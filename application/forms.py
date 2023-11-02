@@ -10,7 +10,7 @@ class SignUpForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired(), Length(min = 8)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min = 8)])
     confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password", message = "Password must match!")])
-    submit = SubmitField("Sign Up")
+    submit = SubmitField("Register")
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
@@ -21,21 +21,20 @@ class EditProfileForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), exists_username])
     fullname = StringField("Fullname", validators=[DataRequired()])
     email = EmailField("Email", validators=[DataRequired(), exists_email])
-    password = PasswordField("Password", validators=[DataRequired()])
-    profile_pic = FileField("Bio", validators=[FileAllowed(["jpg", "png", "jpeg"])])
+    profile_pic = FileField("Profile Picture", validators=[FileAllowed(["jpg", "png", "jpeg"])])
     bio = StringField("Bio", validators=[DataRequired()])
     submit = SubmitField("Update Profile")
-
-class ResetPasswordForm(FlaskForm):
-    old_password = PasswordField("Old Password", validators=[DataRequired(), Length(min=8)])
-    new_password        = PasswordField("New Password", validators=[DataRequired(), Length(min=8)])
-    confirm_new_password = PasswordField("Confirm New Password", validators=[DataRequired(), Length(min=8), EqualTo("new_password")])
-    submit              = SubmitField("Reset Password")
 
 class ForgotPasswordForm(FlaskForm):
     email = PasswordField("Email", validators=[DataRequired(), not_exists_email])
     recaptcha = RecaptchaField()
-    submit = SubmitField("Send verification link to email")
+    submit = SubmitField("Submit")
+
+class ResetPasswordForm(FlaskForm):
+    old_password = PasswordField("Old Password", validators=[DataRequired(), Length(min=8)])
+    new_password = PasswordField("New Password", validators=[DataRequired(), Length(min=8)])
+    confirm_new_password = PasswordField("Confirm New Password", validators=[DataRequired(), Length(min=8), EqualTo("new_password")])
+    submit = SubmitField("Submit")
 
 class VerificationResetPasswordForm(FlaskForm):
     password        = PasswordField("New Password", validators=[DataRequired(), Length(min=8)])
@@ -43,10 +42,10 @@ class VerificationResetPasswordForm(FlaskForm):
     submit = SubmitField("Reset Password")
 
 class CreatePostForm(FlaskForm):
-    post = FileField("picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
+    post = FileField("Picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
     caption = StringField("Caption")
     submit = SubmitField("Upload Post")
     
-class EditPost(FlaskForm):
+class EditPostForm(FlaskForm):
     caption = StringField("New Caption")    
     submit = SubmitField("Update Note")

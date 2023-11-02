@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 381px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        section.content {
+            min-height: calc(100vh - 100px);
+            padding: 0.5em 0;
+        }
+
+        header ul li {
+            height: 1em;
+            font-size: 1.25em;
+            display: inline-block;
+        }
+
+        a {
+            text-decoration: none;
+            color: rgb(25, 125, 125);
+        }
+
+        fieldset{
+            margin: 1em 0;
+            border: rgb(25, 125, 125) solid;
+        }
+
+        fieldset>legend{
+            font-size: 2em;
+            color: rgb(25, 125, 125);
+        }
+
+        fieldset>div{
+            margin: 1em 0.5em;
+            color: rgb(25, 125, 125);
+        }
+
+        fieldset>div>input{
+            border-color: lightgray;
+        }
+
+        form>div{
+            margin: 0.5em 0;
+        }
+
+        form>small{
+            margin: 0.5em 0;
+        }
+
+        input#submit.btn.btn-outline-info{
+            height: 1.5em;
+            width: 3em;
+            color: rgb(25, 125, 125);
+            background-color: white;
+            border-color: rgb(25, 125, 125);
+            border-radius: 10%;
+        }
+    </style>
+    {% if title %}
+        <title>{{ title }} - Website</title>
+    {% else %}
+        <title>Website</title>
+    {% endif %}
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+        {% include "components/login-header.html" %}
+    {% else %}
+        {% include "components/logout-header.html" %}
+    {% endif %}
+    <div class="alert-box">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <section class="content">
+        {% block content %}{% endblock %}
+    </section>
+    {% include "components/footer.html" %}
+</body>
+</html>

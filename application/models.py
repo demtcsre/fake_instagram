@@ -1,4 +1,4 @@
-from app import db
+from application import db
 from datetime import datetime
 from flask_login import UserMixin
 
@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(128), nullable = False)
     profile_pic = db.Column(db.String(128), default="default.jpg")
     bio = db.Column(db.String(128))
-    join_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow())
+    join_date = db.Column(db.DateTime, nullable = True, default=datetime.utcnow())
     status = db.Column(db.Boolean(), default=True)
     follower_users = db.relationship("Relation", foreign_keys = "Relation.follower_id", backref = "follower", lazy=True)
     following_users = db.relationship("Relation", foreign_keys = "Relation.following_id", backref = "following", lazy=True)
@@ -50,7 +50,7 @@ class Comment(db.Model):
 class Like(db.Model):
     __tablename__ = "likes"
     id = db.Column(db.Integer, primary_key = True)
-    like_count = db.Column(db.Integer, nullable = False)
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), nullable = False)
     liked_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+    like_count = db.Column(db.Integer, nullable = False)
     like_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow())
