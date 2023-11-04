@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, login_required, logout_user, current_user
 
 from application import app
@@ -9,7 +9,7 @@ from application.utils import save_image
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('profile'))
+        return redirect(url_for('profile', username = current_user.username))
 
     form = LoginForm()
 
@@ -20,7 +20,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and password == user.password:
             login_user(user)
-            return redirect(url_for('profile'))
+            return redirect(url_for('profile', username = current_user.username))
         else:
             flash('Invalid username or password', 'error')
 
@@ -31,13 +31,18 @@ def signup():
     form = SignUpForm()
 
     if form.validate_on_submit():
-        password = form.password.data
-        confirm_password = form.confirm_password.data
 
-        if confirm_password == password:
-            return redirect(url_for('profile'))
-        else:
-            flash('Please input the same password', 'error')
+        user = User(
+            username = form.username.data,
+            fullname = form.fullname.data,
+            email = form.email.data,
+            profile_pic = form.profile_pic.data,
+            password = form.password.data
+        )
+        db.session.add(user)
+        db.session.commit()
+        flash('Account has been made', 'success')
+        return redirect(url_for('login'))
 
     return render_template('signup.html', title='SignUp', form=form)
 
@@ -47,29 +52,32 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 @login_required
 def index():
     form = CreatePostForm()
-
+    
     if form.validate_on_submit():
         post = Post(
             author_id = current_user.id,
             caption = form.caption.data
         )
-    post.photo = save_image(form.photo.data)
-    db.session.add(post)
-    db.session.commit()
-    flash('Your image has been posted!', 'success')
+        post.photo = save_image(form.post_pic.data)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your image has been posted!', 'success')
 
-    posts = Post.query.filter_by(author_id = current_user.id).all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.filter_by(author_id = current_user.id).order_by(Post.id.desc()).paginate(page=page, per_page=3)
 
-    return render_template('index.html', title='Home', form = form)
+    return render_template('index.html', title='Home', form = form, posts = posts)
 
-@app.route('/profile')
+@app.route('/<string:username>')
 @login_required
-def profile():
-    return render_template('profile.html', title=f'{current_user.fullname} Profile')
+def profile(username):
+    posts = current_user.posts.reverse()
+
+    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts)
 
 @app.route('/edit-profile')
 @login_required
@@ -93,11 +101,6 @@ def forgot():
     form = ForgotPasswordForm()
     return render_template('forgot-password.html', title="Forgot Password", form=form)
 
-@app.route('/create-post')
-@login_required
-def create_post():
-    form = CreatePostForm()
-    return render_template('create-post.html', title="Create Post", form=form)
 
 @app.route('/edit-post')
 @login_required

@@ -1,49 +1,50 @@
 {% extends 'layout.html' %}
 	
 {% block content %}
-	<div class="form-box" style="border: 0.5em black solid">
+	<div class="form-box" style="border: 0.625em black solid">
         <h2>Create a New Post</h2>
         <form method="POST" enctype="multipart/form-data">
             {{form.hidden_tag()}}
             <div class="form-group">
-                {{ form.post.label(class="form-control-label") }}
-                {{ form.post(class="form-control-file") }}
+                {{ form.post_pic.label(class="form-control-label") }}
+                {{ form.post_pic(class="form-control-file") }}
 
-                {% if form.post.errors%}
-                    {{ form.post(class="") }}
-                    <div class="">
-                        {% for error in form.post.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.post(class=" ") }}
-                {% endif %}
+                {% for error in form.post_pic.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
             </div>
 
             <div class="form-group">
-                {{ form.caption.label(class="") }}
-
-                {% if form.caption.errors%}
-                    {{ form.caption(class="") }}
-                    <div class="">
-                        {% for error in form.caption.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.caption(class=" ") }}
-                {% endif %}
+                {{ form.caption.label(class="form-control-label") }}
+                {{ form.caption(class="form-control-file") }}
+]
+                {% for error in form.caption.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}]
             </div>
 
 			<div class="form-group">
-				{{ form.submit(class="btn btn-outline-info") }}
+				{{ form.submit(class="btn btn-primary") }}
 			</div>
-
         </form>
-
-        <div class="post-container">
-            
-        </div>
 	</div>
+
+    <div class="post-container">
+        {% for post in posts.items %}
+            <div class="post">
+                <img src="{{ url_for('static', filename=''+post.photo)}}" alt="Post Image">
+                <p>{{ post.caption }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination-box">
+        {% for page_number in posts.iter_pages() %}
+            {% if page_number == posts.page %}
+                <a href="{{ url_for('index', page = page_number)}}" style="color: rgb(25, 125, 125);">{{page_number}}</a>
+            {% else %}
+                <a href="{{ url_for('index', page = page_number)}}" style="color: rgb(25, 175, 175);">{{page_number}}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock content %}

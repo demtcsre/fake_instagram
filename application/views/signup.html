@@ -8,6 +8,21 @@
 				<legend class="">Register</legend>
 
 				<div class="">
+					{{ form.profile_pic.label(class="") }}
+
+					{% if form.profile_pic.errors%}
+						{{ form.pfp(class="") }}
+						<div class="">
+							{% for error in form.profile_pic.errors %}
+								<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.profile_pic(class=" ") }}
+					{% endif %}
+				</div>
+
+				<div class="">
 					{{ form.username.label(class="") }}
 
 					{% if form.username.errors%}

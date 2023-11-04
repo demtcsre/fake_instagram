@@ -8,6 +8,7 @@ class SignUpForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), Length(min = 4), exists_username])
     fullname = StringField("Fullname", validators=[DataRequired(), Length(min = 4)])
     email = EmailField("Email", validators=[DataRequired(), Length(min = 8)])
+    profile_pic = FileField("Profile Picture", validators=[FileAllowed(["jpg", "png", "jpeg"])])
     password = PasswordField("Password", validators=[DataRequired(), Length(min = 8)])
     confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password", message = "Password must match!")])
     submit = SubmitField("Register")
@@ -42,7 +43,7 @@ class VerificationResetPasswordForm(FlaskForm):
     submit = SubmitField("Reset Password")
 
 class CreatePostForm(FlaskForm):
-    post = FileField("Picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
+    post_pic = FileField("Picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
     caption = StringField("Caption")
     submit = SubmitField("Upload Post")
     

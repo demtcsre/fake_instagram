@@ -11,13 +11,14 @@
         }
 
         body {
-            width: 381px;
+            width: 480px;
             margin: 0 auto;
             padding: 20px;
         }
 
         section.content {
-            min-height: calc(100vh - 100px);
+            min-height: calc(100vh - 6.25em);
+            width: auto;
             padding: 0.5em 0;
         }
 
@@ -25,6 +26,10 @@
             height: 1em;
             font-size: 1.25em;
             display: inline-block;
+        }
+
+        h1{
+            color: rgb(25, 125, 125);
         }
 
         a {
@@ -61,11 +66,38 @@
 
         input#submit.btn.btn-outline-info{
             height: 1.5em;
-            width: 3em;
+            width: auto;
             color: rgb(25, 125, 125);
             background-color: white;
             border-color: rgb(25, 125, 125);
             border-radius: 10%;
+        }
+
+        div.new-post-box {
+            padding: 5px;
+        }
+
+        div.post-container {
+            border: 1px solid black;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        div.post{
+            width: 480;
+            height: 270px;
+        }
+
+        img{
+            width: 320px;
+            height: 180px;
+        }
+
+        div.pagination-box{
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            margin-bottom: 30px;
         }
     </style>
     {% if title %}
@@ -75,25 +107,26 @@
     {% endif %}
 </head>
 <body>
-    {% if current_user.is_authenticated %}
-        {% include "components/login-header.html" %}
-    {% else %}
-        {% include "components/logout-header.html" %}
-    {% endif %}
-    <div class="alert-box">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </div>
     <section class="content">
+        {% if current_user.is_authenticated %}
+            {% include "components/login-header.html" %}
+        {% else %}
+            {% include "components/logout-header.html" %}
+        {% endif %}
+        <div class="alert-box">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
         {% block content %}{% endblock %}
+        {% include "components/footer.html" %}
     </section>
-    {% include "components/footer.html" %}
 </body>
 </html>
