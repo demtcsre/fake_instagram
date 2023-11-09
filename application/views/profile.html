@@ -3,7 +3,11 @@
 {% block content %}
     <div class="profile-card">
         <div class="profile-photo">
-            <img src="{{ url_for('static', filename='images/' + current_user.profile_pic ) }}" alt="Profile Photo">
+            <!-- {% if current_user.profile_pic == NULL %} -->
+                <img src="{{ url_for('static', filename='/default.jpg' ) }}" alt="Profile Photo">
+            <!-- {% else %}
+                <img src="{{ url_for('static', filename='/.jpg' ) }}" alt="">
+            {% endif %} -->
         </div>
         <div class="profile-info">
             <h2>{{current_user.fullname}}</h2>
@@ -14,8 +18,8 @@
     </div>
 
     <div class="image-container">
-        {% for post in posts.item %}
-        <div class="image-item"><img src="{{ url_for('static', filename='' + post.photo) }}" alt="Post Image"></div>
+        {% for post in posts %}
+            <div class="image-item"><img src="{{ url_for('static', filename='' + post.photo) }}" alt="Post Image"></div>
         {% endfor %}
     </div>
 {% endblock content %}

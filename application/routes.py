@@ -68,21 +68,33 @@ def index():
         flash('Your image has been posted!', 'success')
 
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.filter_by(author_id = current_user.id).order_by(Post.id.desc()).paginate(page=page, per_page=3)
+    posts = Post.query.order_by(Post.id.desc()).paginate(page=page, per_page=3)
 
     return render_template('index.html', title='Home', form = form, posts = posts)
 
 @app.route('/<string:username>')
 @login_required
 def profile(username):
-    posts = current_user.posts.reverse()
+    posts = current_user.posts
+    posts_new = reversed(posts)
+    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts_new)
 
-    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts)
-
-@app.route('/edit-profile')
+@app.route('/edit-profile', methods=['GET','POST'])
 @login_required
 def edit_profile():
     form = EditProfileForm()
+
+    user = User.query.get(current_user.id)
+    if form.validate_on_submit():
+        user.username = form.username.data
+        user.fullname = form.fullname.data
+        user.email = form.email.data
+        user.bio = form.bio.data
+        db.session.commit()
+        posts = current_user.posts
+        posts_new = reversed(posts)
+        return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts_new)
+
     return render_template('edit-profile.html', title='Edit Profile',form=form)
 
 @app.route('/reset')
