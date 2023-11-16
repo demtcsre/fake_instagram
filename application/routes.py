@@ -36,7 +36,7 @@ def signup():
             username = form.username.data,
             fullname = form.fullname.data,
             email = form.email.data,
-            profile_pic = save_image(form.username.data, pfp=True),
+            profile_pic = save_image(form.profile_pic.data, pfp=True),
             password = form.password.data
         )
         db.session.add(user)
@@ -91,9 +91,9 @@ def edit_profile():
             user.username = form.username.data
         user.fullname = form.fullname.data
         user.email = form.email.data
-        user.profile_pic = save_image(request.files['profile_pic'], pfp=True) #save_image(form.profile_pic.data, pfp=True)
+        user.profile_pic = save_image(request.files['profile_pic'], pfp=True)
         if user.profile_pic == None:
-            user.profile_pic = "images/default.jpg"
+            user.profile_pic = current_user.profile_pic
         user.bio = form.bio.data
 
         db.session.commit()
