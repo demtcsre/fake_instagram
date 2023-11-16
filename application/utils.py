@@ -3,7 +3,6 @@ import secrets
 from PIL import Image
 
 from flask import current_app
-
 from wtforms.validators import ValidationError
 
 from application import login_manager
@@ -28,17 +27,19 @@ def exists_username(form, username):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-def save_image(form_picture_data):
+def save_image(form_picture_data, pfp = True):
     random_hex = secrets.token_hex(5)
-    _, f_ext = os.path.splitext(form_picture_data.filename) #f_ext = file extension,underscore dipake ketika variabel yang ingin dipake bingung
-    picture_fn = 'images/posts/'+random_hex+f_ext
+    _, f_ext = os.path.splitext(form_picture_data.filename)
+
+    if pfp:
+        picture_fn = 'images/profile_pics/'+random_hex+f_ext
+
+    else:
+        picture_fn = 'images/posts/'+random_hex+f_ext
+    
     picture_path = os.path.join(current_app.root_path, 'static/', picture_fn)
 
     image = Image.open(form_picture_data)
-    # i_width, i_height = image.size
-    # ratio = i_width/1000
-    # output_size = (i_widith/ratio, i_height/ratio)
-    # image.thumbnail(image)z
     image.save(picture_path)
 
     return picture_fn

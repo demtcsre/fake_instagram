@@ -1,10 +1,10 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, make_response, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 
 from application import app
 from application.models import *
 from application.forms import *
-from application.utils import save_image
+from application.utils import *
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -36,7 +36,7 @@ def signup():
             username = form.username.data,
             fullname = form.fullname.data,
             email = form.email.data,
-            profile_pic = form.profile_pic.data,
+            profile_pic = save_image(form.username.data, pfp=True),
             password = form.password.data
         )
         db.session.add(user)
@@ -62,10 +62,11 @@ def index():
             author_id = current_user.id,
             caption = form.caption.data
         )
-        post.photo = save_image(form.post_pic.data)
+        print(form.post_pic.data)
+        post.photo = save_image(form.post_pic.data, pfp=False)
         db.session.add(post)
         db.session.commit()
-        flash('Your image has been posted!', 'success')
+        flash('Your image has been posted 🩷!', 'success')
 
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.id.desc()).paginate(page=page, per_page=3)
@@ -77,25 +78,33 @@ def index():
 def profile(username):
     posts = current_user.posts
     posts_new = reversed(posts)
-    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts_new)
+    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts)
 
 @app.route('/edit-profile', methods=['GET','POST'])
 @login_required
 def edit_profile():
     form = EditProfileForm()
 
-    user = User.query.get(current_user.id)
     if form.validate_on_submit():
-        user.username = form.username.data
+        user = User.query.get(current_user.id)
+        if form.username.data != user.username:
+            user.username = form.username.data
         user.fullname = form.fullname.data
         user.email = form.email.data
+        user.profile_pic = save_image(request.files['profile_pic'], pfp=True) #save_image(form.profile_pic.data, pfp=True)
+        if user.profile_pic == None:
+            user.profile_pic = "images/default.jpg"
         user.bio = form.bio.data
-        db.session.commit()
-        posts = current_user.posts
-        posts_new = reversed(posts)
-        return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts_new)
 
-    return render_template('edit-profile.html', title='Edit Profile',form=form)
+        db.session.commit()
+        flash('Profile updated', 'success')
+        return redirect(url_for('profile', username=current_user.username))
+
+    form.username.data = current_user.username
+    form.fullname.data = current_user.fullname
+    form.bio.data = current_user.bio
+    
+    return render_template('edit-profile.html', title=f'Edit {current_user.username} Profile', form=form)
 
 @app.route('/reset')
 @login_required
@@ -113,12 +122,24 @@ def forgot():
     form = ForgotPasswordForm()
     return render_template('forgot-password.html', title="Forgot Password", form=form)
 
-
 @app.route('/edit-post')
 @login_required
 def edit_post():
     form = EditPostForm()
     return render_template('edit-post.html', title="Edit Post", form=form)
+
+@app.route('/like/<int:post_id>', methods=['POST'])
+@login_required
+def like(post_id):
+    like = Like.query.filter_by(liked_by = current_user, post_id = post_id).first()
+    if not like:
+        like = Like(user_id=current_user.id, post_id=post_id)
+        db.session.add(like)
+        db.session.commit()
+        return make_response(200, jsonify({"status" : True}))
+    db.session.delete(like)
+    db.session.commit()
+    return make_response(200, jsonify({"status" : False}))
 
 if __name__ == '__main__':
     app.run(debug=True)

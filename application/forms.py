@@ -19,10 +19,10 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 class EditProfileForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired(), exists_username])
+    username = StringField("Username", validators=[DataRequired()])
     fullname = StringField("Fullname", validators=[DataRequired()])
     email = EmailField("Email", validators=[DataRequired(), exists_email])
-    profile_pic = FileField("Profile Picture", validators=[FileAllowed(["jpg", "png", "jpeg"])])
+    profile_pic = FileField("Profile Picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
     bio = StringField("Bio", validators=[DataRequired()])
     submit = SubmitField("Update Profile")
 
