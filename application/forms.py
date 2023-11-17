@@ -49,4 +49,4 @@ class CreatePostForm(FlaskForm):
     
 class EditPostForm(FlaskForm):
     caption = StringField("New Caption")    
-    submit = SubmitField("Update Note")
+    submit = SubmitField("Update Post")

@@ -3,25 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         * {
-            padding: 0px;
-            margin: 0px;
+            background-color: rgb(229, 229, 229);
+            background-color: white;
+            font-family: 'Roboto', sans-serif;;
+            margin: 0;
             box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        button {
+            display: flex; 
+            width: 100%; 
+            justify-content: center; 
+            padding: 10px; 
+            margin-bottom: 20px; 
+            background-color: white;
+        }
+
+        a{
+            font-size: 1.25em;
+            text-decoration: none;
+            color: rgb(25, 125, 125);
+            margin-right: 0.25em;
         }
 
         body {
             padding: 20px;
+            min-height: 100%;
         }
 
         section.content {
             min-height: calc(100vh - 100px);
+            min-height: calc(100vh - 40px);
             width: 576px;
             margin: 0px auto;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        
+        header ul{
+            padding: 0.5em;
         }
 
         header ul li {
             display: inline-block;
+        }
+
+        small a{
+            font-size: 1.25em;
+        }
+
+        div.form {
+            margin-top: 1.5em;
+            padding: 0.5em;
+        }
+
+        fieldset>legend{
+            font-size: 1.75em;
+            color: rgb(25, 125, 125);
+            margin: auto;
+        }
+
+        fieldset input{
+            font-size: 1.25em;
+            color: rgb(25, 125, 125);
+            padding: 0.5em 0.5em;
+        }
+
+        fieldset label{
+            font-size: 1.25em;
+            color: rgb(25, 125, 125);
+        }
+
+        form>div.submit>input{
+            font-size: 1.25em;
+            color: rgb(25, 125, 125);
+            padding: 0.5em;
+        }
+
+        form>div.submit>small{
+            display: inline-block;
+        }
+
+        button.edit-profile{
+            font-size: 1.25em;
+            color: rgb(25, 125, 125);
+        }
+
+        div.alert.alert-info{
+            font-size: 1em;
+            color: rgb(25, 125, 125);
+            padding: 0.5em;
         }
 
         div.new-post-box {
@@ -29,18 +106,38 @@
         }
 
         div.post-container {
+            width: 550px;
             border: 1px solid black;
-            margin: 50px auto;
+            margin: 4em auto 0 auto;
             text-align: center;
-            padding: 5px;
+            padding: 0.25em;
         }
 
-        img {
-            width: 500px;
+        div.post-container>div.post {
+            margin-top: 0.5em;
+            margin-bottom: 4em;
+        }
+
+        div.post-container>div.post>div.caption {
+            display: flex;
+            width: 400px;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 0 5em;
+            padding: 0;
+        }
+
+        div.post-container>div.post>div.caption>h3 {
+            margin-right: 0.5em;
+        }
+
+        div.post>img {
+            border: 0.25em solid black;
+            width: 400px;
+            height: 400px;
         }
 
         div.pagination-box {
-            border: 1px solid black;
             text-align: center;
             padding: 5px;
             margin-bottom: 30px;
@@ -52,11 +149,15 @@
             max-width: 900px;
             justify-content: flex-start;
             align-items: center;
+            border: 1px solid black;
         }
 
         .image-item {
-            flex: 0 0 calc(33.33% - 20px); /* Adjust the width and margin as needed */
+            flex: 0 0 calc(33.33% - 20px);
             margin: 10px;
+            height: 165.44px;
+            display: flex;
+            justify-content: center;
             box-sizing: border-box;
             overflow: hidden;
             border: 1px solid #ddd;
@@ -64,7 +165,9 @@
         }
 
         .image-item img {
+            display: flex;
             max-width: 100%;
+            height: 165.44px;
             height: auto;
             display: block;
         }
@@ -85,6 +188,15 @@
             overflow: hidden;
             line-height: 100px;
         }
+        
+        .wrapper {
+            width: 6em;
+            height: 6em;
+            border-radius: 50%;
+            overflow: hidden;
+            line-height: 100px;
+            margin: auto 0;
+        }
 
         .profile-photo img {
             max-width: 100%;
@@ -92,16 +204,53 @@
         }
 
         .profile-info {
+            color: rgb(25, 125, 125);
             margin-left: 20px;
             text-align: left;
         }
 
-        .profile-info h2 {
-            margin: 0;
-        }
-
         .profile-info p {
             margin: 5px 0;
+        }
+
+        div.pagination-box {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            margin-bottom: 30px;
+        }
+
+        div.post-header {
+            display: flex;
+            width: 400px;
+            justify-content: flex-start;
+            margin: 0 0 1em 5em;
+            padding: 0;
+        }
+
+        .post-header img {
+            border-radius: 50%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .post-header h2 {
+            border-radius: 50%;
+            margin: 0 0 0 0.25em;
+            padding: 0;
+        }
+
+        input {
+			width: 100%;
+			padding: 1em;
+            margin: 0.5em auto;
+			border-radius: 10px;
+			border: 1px solid #6d6868;
+			font-family: inherit;
+		}
+
+        footer{
+            margin-top: 1em;
         }
     </style>
     {% if title %}

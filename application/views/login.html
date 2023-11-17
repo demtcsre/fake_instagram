@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 	
 {% block content %}
-	<div class="">
+	<div class="form">
         <form method="POST" action="">
 			{{ form.hidden_tag() }}
 			<fieldset class="">
@@ -39,16 +39,13 @@
 
 				</div>
 			</fieldset>
-			<div class="">
+			<div class="submit">
 				{{ form.submit(class="btn btn-outline-info") }}
 				<small class="">
 					<a href="{{ url_for('forgot') }}">Forgot your password?</a>
-				</small>
+					<a href="{{ url_for('signup') }}">Have no account yet?</a>
+				</small>	
 			</div>
-			<small class="">
-				<a href="{{ url_for('signup') }}">Have no account yet?</a>
-			</small>
-
 		</form>
 	</div>
 {% endblock content %}
