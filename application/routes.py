@@ -78,7 +78,7 @@ def index():
 def profile(username):
     posts = current_user.posts
     posts_new = reversed(posts)
-    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts)
+    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts_new)
 
 @app.route('/edit-profile', methods=['GET','POST'])
 @login_required
@@ -128,21 +128,21 @@ def edit_post():
     form = EditPostForm()
     return render_template('edit-post.html', title="Edit Post", form=form)
 
-@app.route('/like/<int:post_id>', methods=['POST'])
+@app.route('/like', methods=['GET', 'POST'])
 @login_required
-def like(post_id):
+def like():
     data = request.json
-    post_is = int(data['postId'])
-    like = Like.query.filter_by(user_id = current_user, post_id=post_id).first()
+    post_id = int(data['postId'])
+    like = Like.query.filter_by(user_id=current_user.id,post_id=post_id).first()
     if not like:
         like = Like(user_id=current_user.id, post_id=post_id)
         db.session.add(like)
         db.session.commit()
-        return make_response(200, jsonify({"status" : True}), 200)
+        return make_response(jsonify({"status" : True}), 200)
     
     db.session.delete(like)
     db.session.commit()
-    return make_response(200, jsonify({"status" : False}), 200)
+    return make_response(jsonify({"status" : False}), 200)
 
 if __name__ == '__main__':
     app.run(debug=True)

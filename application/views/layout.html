@@ -13,19 +13,19 @@
             font-family: 'Roboto', sans-serif;;
             margin: 0;
             box-sizing: border-box;
-            border-radius: 5px;
+            border-radius: 0.3125em;
         }
         
         button {
             display: flex; 
             width: 100%; 
             justify-content: center; 
-            padding: 10px; 
-            margin-bottom: 20px; 
+            padding: 0.625em; 
+            margin: 0.75em 0; 
             background-color: white;
         }
 
-        a{
+        header a{
             font-size: 1.25em;
             text-decoration: none;
             color: rgb(25, 125, 125);
@@ -33,17 +33,16 @@
         }
 
         body {
-            padding: 20px;
+            padding: 1.25em;
             min-height: 100%;
         }
 
         section.content {
-            min-height: calc(100vh - 100px);
-            min-height: calc(100vh - 40px);
-            width: 576px;
-            margin: 0px auto;
-            padding-left: 5px;
-            padding-right: 5px;
+            min-height: calc(100vh - 2.5em);
+            width: 36em;
+            margin: 0 auto;
+            padding-left: 0.3125em;
+            padding-right: 0.3125em;
         }
         
         header ul{
@@ -56,6 +55,8 @@
 
         small a{
             font-size: 1.25em;
+            color: rgb(25, 125, 125);
+            text-decoration: none;
         }
 
         div.form {
@@ -102,12 +103,12 @@
         }
 
         div.new-post-box {
-            padding: 5px;
+            padding: 0.3125em;
         }
 
         div.post-container {
-            width: 550px;
-            border: 1px solid black;
+            width: 34.375em;
+            border: 0.0625em solid black;
             margin: 4em auto 0 auto;
             text-align: center;
             padding: 0.25em;
@@ -118,56 +119,72 @@
             margin-bottom: 4em;
         }
 
-        div.post-container>div.post>div.caption {
+        div.post-container>div.post>div.text-box{
             display: flex;
-            width: 400px;
-            justify-content: flex-start;
-            align-items: center;
-            margin: 0 5em;
+            width: 25em;
+            margin: 0 4.5em;
             padding: 0;
+            justify-content: space-between;
         }
 
-        div.post-container>div.post>div.caption>h3 {
+        div.post-container>div.post div.caption {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        div.post-container>div.post div.caption>h3 {
             margin-right: 0.5em;
+            color: rgb(25, 125, 125);
+        }
+
+        
+        div.post-container>div.post div.footer {
+            justify-content: flex-end;
+            align-items: center;
         }
 
         div.post>img {
             border: 0.25em solid black;
-            width: 400px;
-            height: 400px;
+            width: 25em;
+            height: 25em;
         }
 
         div.pagination-box {
             text-align: center;
-            padding: 5px;
-            margin-bottom: 30px;
+            padding: 0.3125em;
+            margin-bottom: 1.875em;
+        }
+        
+        div.pagination-box a{
+            text-decoration: none;
         }
 
         .image-container {
             display: flex;
             flex-wrap: wrap;
-            max-width: 900px;
+            max-width: 56.25em;
             justify-content: flex-start;
             align-items: center;
-            border: 1px solid black;
+            border: 0.0625em solid black;
         }
 
         .image-item {
-            flex: 0 0 calc(33.33% - 20px);
-            margin: 10px;
-            height: 165.44px;
+            flex: 0 0 calc(33.33% - 1.25em);
+            margin: 0.625em;
+            height: 10.5em;
             display: flex;
             justify-content: center;
             box-sizing: border-box;
             overflow: hidden;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 0.0625em solid #ddd;
+            box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.1);
         }
 
         .image-item img {
             display: flex;
             max-width: 100%;
-            height: 165.44px;
+            height: 10.5em;
             height: auto;
             display: block;
         }
@@ -176,17 +193,18 @@
             border: 1px solid black;
             display: flex;
             width: 100%;
-            padding: 20px;
+            padding: 0.125em;
             text-align: center;
-            margin: 20px 0px;
+            margin: 0.125em 0;
+            padding: 1em;
         }
 
         .profile-photo {
-            width: 100px;
-            height: 100px;
+            width: 6.25em;
+            height: 6.25em;
             border-radius: 50%;
             overflow: hidden;
-            line-height: 100px;
+            line-height: 6.25em;
         }
         
         .wrapper {
@@ -205,26 +223,26 @@
 
         .profile-info {
             color: rgb(25, 125, 125);
-            margin-left: 20px;
+            margin-left: 1.25em;
             text-align: left;
         }
 
         .profile-info p {
-            margin: 5px 0;
+            margin: 0.3125em 0;
         }
 
         div.pagination-box {
-            border: 1px solid black;
+            border: 0.625em solid black;
             text-align: center;
-            padding: 5px;
-            margin-bottom: 30px;
+            padding: 0.3125em;
+            margin-bottom: 1.875em;
         }
 
         div.post-header {
             display: flex;
-            width: 400px;
+            width: 25em;
             justify-content: flex-start;
-            margin: 0 0 1em 5em;
+            margin: 0 0 1em 4.5em;
             padding: 0;
         }
 
@@ -234,8 +252,9 @@
             padding: 0;
         }
 
-        .post-header h2 {
-            border-radius: 50%;
+        .post-header a {
+            text-decoration: none;
+            color: rgb(25, 125, 125);
             margin: 0 0 0 0.25em;
             padding: 0;
         }
@@ -244,12 +263,17 @@
 			width: 100%;
 			padding: 1em;
             margin: 0.5em auto;
-			border-radius: 10px;
-			border: 1px solid #6d6868;
+			border-radius: 0.625em;
+			border: 0.0625em solid #6d6868;
 			font-family: inherit;
 		}
 
         footer{
+            position: static;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 2.5em;
             margin-top: 1em;
         }
     </style>
