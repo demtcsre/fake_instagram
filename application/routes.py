@@ -52,9 +52,18 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/')
 @login_required
 def index():
+
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.id.desc()).paginate(page=page, per_page=3)
+
+    return render_template('index.html', title='Home', posts = posts)
+
+@app.route('/create-post', methods=['GET', 'POST'])
+@login_required
+def create_post():
     form = CreatePostForm()
     
     if form.validate_on_submit():
@@ -67,11 +76,10 @@ def index():
         db.session.add(post)
         db.session.commit()
         flash('Your image has been posted 🩷!', 'success')
-
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.id.desc()).paginate(page=page, per_page=3)
-
-    return render_template('index.html', title='Home', form = form, posts = posts)
+        
+        return redirect(url_for('profile', username = current_user.username))
+    
+    return render_template('create-post.html', title='Create New Post',form = form)
 
 @app.route('/<string:username>')
 @login_required

@@ -1,36 +1,6 @@
 {% extends 'layout.html' %}
 	
 {% block content %}
-	<div class="form">
-        <form method="POST" enctype="multipart/form-data">
-            {{form.hidden_tag()}}
-            <fieldset>
-                <legend>Create a New Post</legend>
-                
-                <div class="">
-                    {{ form.post_pic.label(class="form-control-label") }}
-                    {{ form.post_pic(class="form-control-file") }}
-
-                    {% for error in form.post_pic.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
-                </div>
-
-                <div class="">
-                    {{ form.caption.label(class="form-control-label") }}
-                    {{ form.caption(class="form-control-file") }}
-                    {% for error in form.caption.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
-                </div>
-
-                <div class="">
-                    {{ form.submit(class="btn btn-primary") }}
-                </div>
-            </fieldset>
-        </form>
-	</div>
-
     <div class="post-container">
         {% for post in posts.items %}
             <div class="post">
