@@ -130,11 +130,21 @@ def forgot():
     form = ForgotPasswordForm()
     return render_template('forgot-password.html', title="Forgot Password", form=form)
 
-@app.route('/edit-post')
-@login_required
-def edit_post():
+@app.route('/editpost/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
     form = EditPostForm()
-    return render_template('edit-post.html', title="Edit Post", form=form)
+
+    post = Post.query.get(post_id)
+    if form.validate_on_submit():
+        post.caption = form.caption.data
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('profile', username=current_user.username))
+
+    elif request.method == 'GET':
+        form.caption.data = post.caption
+
+    return render_template('edit-post.html', title='Edit Post', form=form, post=post)
 
 @app.route('/like', methods=['GET', 'POST'])
 @login_required
@@ -146,11 +156,11 @@ def like():
         like = Like(user_id=current_user.id, post_id=post_id)
         db.session.add(like)
         db.session.commit()
-        return make_response(jsonify({"status" : True}), 200)
+        return make_response(200, jsonify({"status" : True}), 200)
     
     db.session.delete(like)
     db.session.commit()
-    return make_response(jsonify({"status" : False}), 200)
+    return make_response(200, jsonify({"status" : False}), 200)
 
 if __name__ == '__main__':
     app.run(debug=True)
