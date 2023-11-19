@@ -151,16 +151,17 @@ def edit_post(post_id):
 def like():
     data = request.json
     post_id = int(data['postId'])
-    like = Like.query.filter_by(user_id=current_user.id,post_id=post_id).first()
+    like = Like.query.filter_by(liked_by=current_user.id,post_id=post_id).first()
     if not like:
-        like = Like(user_id=current_user.id, post_id=post_id)
+        like = Like(liked_by=current_user.id, post_id=post_id)
         db.session.add(like)
         db.session.commit()
-        return make_response(200, jsonify({"status" : True}), 200)
+        return make_response(jsonify({"status" : True}), 200)
     
-    db.session.delete(like)
-    db.session.commit()
-    return make_response(200, jsonify({"status" : False}), 200)
+    else:
+        db.session.delete(like)
+        db.session.commit()
+    return make_response(jsonify({"status" : False}), 200)
 
 if __name__ == '__main__':
     app.run(debug=True)
