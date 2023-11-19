@@ -37,11 +37,6 @@ class ResetPasswordForm(FlaskForm):
     confirm_new_password = PasswordField("Confirm New Password", validators=[DataRequired(), Length(min=8), EqualTo("new_password")])
     submit = SubmitField("Reset")
 
-class VerificationResetPasswordForm(FlaskForm):
-    password        = PasswordField("New Password", validators=[DataRequired(), Length(min=8)])
-    confirm_password = PasswordField("Confirm New Password", validators=[DataRequired(), Length(min=8), EqualTo("new_password")])
-    submit = SubmitField("Reset Password")
-
 class CreatePostForm(FlaskForm):
     post_pic = FileField("Picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
     caption = StringField("Caption")

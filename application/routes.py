@@ -55,21 +55,26 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/reset')
+@app.route('/reset', methods=['GET', 'POST'])
 @login_required
 def reset():
     form = ResetPasswordForm()
-    return render_template('reset.html', title="Reset", form=form)
+
+    if form.validate_on_submit():
+        user = User.query.get(current_user.id)
+        if user.password != form.old_password.data:
+            flash("ur old password is wrong")
+        user.password = form.new_password.data
+        db.session.commit()
+        flash("New password has been set!", 'success')
+        return redirect(url_for('profile', username=current_user.username))
+    
+    return render_template('reset.html', title='ResetPassword', form=form)
 
 @app.route('/forgot')
 def forgot():
     form = ForgotPasswordForm()
     return render_template('forgot-password.html', title="Forgot Password", form=form)
-
-@app.route('/verif')
-def verif():
-    form = VerificationResetPasswordForm()
-    return render_template('verif-reset.html', title="Verif Your New Password", form=form)
 
 @app.route('/')
 @login_required
