@@ -26,7 +26,9 @@
             {% for post in posts %}
             <div class="image-item">
                 <img src="{{ url_for('static', filename='' + post.photo) }}" alt="Post Image">
-                <a id="editPostBtn" href="{{ url_for('edit_post', post_id = post.id) }}">📝</a>
+                {% if user == current_user %}
+                    <a id="editPostBtn" href="{{ url_for('edit_post', post_id = post.id) }}">📝</a>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

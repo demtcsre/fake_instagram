@@ -36,12 +36,12 @@ def signup():
             username = form.username.data,
             fullname = form.fullname.data,
             email = form.email.data,
+            profile_pic = save_image(request.files['profile_pic'], pfp=True),
             password = form.password.data
         )
         if user.profile_pic == None:
             user.profile_pic = "images/profile_pics/default.jpg"
-        else:
-            user.profile_pic = save_image(form.profile_pic.data, pfp=True)
+
         db.session.add(user)
         db.session.commit()
         flash('Account has been made', 'success')
@@ -67,7 +67,7 @@ def reset():
         user.password = form.new_password.data
         db.session.commit()
         flash("New password has been set!", 'success')
-        return redirect(url_for('profile', username=current_user.username))
+        return redirect(url_for('login'))
     
     return render_template('reset.html', title='ResetPassword', form=form)
 
