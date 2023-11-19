@@ -55,6 +55,22 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/reset')
+@login_required
+def reset():
+    form = ResetPasswordForm()
+    return render_template('reset.html', title="Reset", form=form)
+
+@app.route('/forgot')
+def forgot():
+    form = ForgotPasswordForm()
+    return render_template('forgot-password.html', title="Forgot Password", form=form)
+
+@app.route('/verif')
+def verif():
+    form = VerificationResetPasswordForm()
+    return render_template('verif-reset.html', title="Verif Your New Password", form=form)
+
 @app.route('/')
 @login_required
 def index():
@@ -64,32 +80,19 @@ def index():
 
     return render_template('index.html', title='Home', posts = posts)
 
-@app.route('/create-post', methods=['GET', 'POST'])
-@login_required
-def create_post():
-    form = CreatePostForm()
-    
-    if form.validate_on_submit():
-        post = Post(
-            author_id = current_user.id,
-            caption = form.caption.data
-        )
-        print(form.post_pic.data)
-        post.photo = save_image(form.post_pic.data, pfp=False)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your image has been posted 🩷!', 'success')
-        
-        return redirect(url_for('profile', username = current_user.username))
-    
-    return render_template('create-post.html', title='Create New Post',form = form)
-
 @app.route('/<string:username>')
 @login_required
 def profile(username):
-    posts = current_user.posts
-    posts_new = reversed(posts)
-    return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts_new)
+    if username == current_user.username:
+        user = current_user
+        posts = current_user.posts
+        posts_new = reversed(posts)
+        return render_template('profile.html', title=f'{current_user.username} Profile', posts = posts_new, user= user)
+    else:
+        user = User.query.filter_by(username=username).first()
+        posts = user.posts
+        posts_new = reversed(posts)
+        return render_template('profile.html', title=f'{user.username} Profile', posts = posts_new, user= user)
 
 @app.route('/edit-profile', methods=['GET','POST'])
 @login_required
@@ -117,23 +120,27 @@ def edit_profile():
     
     return render_template('edit-profile.html', title=f'Edit {current_user.username} Profile', form=form)
 
-@app.route('/reset')
+@app.route('/create-post', methods=['GET', 'POST'])
 @login_required
-def reset():
-    form = ResetPasswordForm()
-    return render_template('reset.html', title="Reset", form=form)
+def create_post():
+    form = CreatePostForm()
+    
+    if form.validate_on_submit():
+        post = Post(
+            author_id = current_user.id,
+            caption = form.caption.data
+        )
+        print(form.post_pic.data)
+        post.photo = save_image(form.post_pic.data, pfp=False)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your image has been posted 🩷!', 'success')
+        
+        return redirect(url_for('profile', username = current_user.username))
+    
+    return render_template('create-post.html', title='Create New Post',form = form)
 
-@app.route('/verif')
-def verif():
-    form = VerificationResetPasswordForm()
-    return render_template('verif-reset.html', title="Verif Your New Password", form=form)
-
-@app.route('/forgot')
-def forgot():
-    form = ForgotPasswordForm()
-    return render_template('forgot-password.html', title="Forgot Password", form=form)
-
-@app.route('/editpost/<int:post_id>', methods=['GET', 'POST'])
+@app.route('/edit-post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
     form = EditPostForm()
 
@@ -149,22 +156,39 @@ def edit_post(post_id):
 
     return render_template('edit-post.html', title='Edit Post', form=form, post=post)
 
-@app.route('/like', methods=['GET', 'POST'])
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get(post_id)
+
+    if post.author_id == current_user.id:
+        Like.query.filter_by(post_id=post.id).delete()
+
+        db.session.delete(post)
+        db.session.commit()
+
+        flash('Your post has been deleted!', 'success')
+
+    return redirect(url_for('profile', username=current_user.username))
+
+@app.route('/like', methods=['POST'])
 @login_required
 def like():
     data = request.json
     post_id = int(data['postId'])
-    like = Like.query.filter_by(liked_by=current_user.id,post_id=post_id).first()
+    like = Like.query.filter_by(liked_by=current_user.id, post_id=post_id).first()
+    
     if not like:
-        like = Like(liked_by=current_user.id, post_id=post_id)
+        like = Like(liekd_by=current_user.id, post_id=post_id)
         db.session.add(like)
         db.session.commit()
-        return make_response(jsonify({"status" : True}), 200)
-    
     else:
         db.session.delete(like)
         db.session.commit()
-    return make_response(jsonify({"status" : False}), 200)
+
+    updated_like_count = Like.query.filter_by(post_id=post_id).count()
+
+    return jsonify({"status": not bool(like), "likeCount": updated_like_count})
 
 if __name__ == '__main__':
     app.run(debug=True)

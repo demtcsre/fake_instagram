@@ -24,7 +24,7 @@ class EditProfileForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired(), exists_email])
     profile_pic = FileField("Profile Picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
     bio = StringField("Bio", validators=[DataRequired()])
-    submit = SubmitField("Update Profile")
+    submit = SubmitField("Update")
 
 class ForgotPasswordForm(FlaskForm):
     email = PasswordField("Email", validators=[DataRequired(), not_exists_email])
@@ -35,7 +35,7 @@ class ResetPasswordForm(FlaskForm):
     old_password = PasswordField("Old Password", validators=[DataRequired(), Length(min=8)])
     new_password = PasswordField("New Password", validators=[DataRequired(), Length(min=8)])
     confirm_new_password = PasswordField("Confirm New Password", validators=[DataRequired(), Length(min=8), EqualTo("new_password")])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Reset")
 
 class VerificationResetPasswordForm(FlaskForm):
     password        = PasswordField("New Password", validators=[DataRequired(), Length(min=8)])
@@ -45,7 +45,7 @@ class VerificationResetPasswordForm(FlaskForm):
 class CreatePostForm(FlaskForm):
     post_pic = FileField("Picture", validators=[DataRequired(), FileAllowed(["jpg", "png", "jpeg"])])
     caption = StringField("Caption")
-    submit = SubmitField("Upload Post")
+    submit = SubmitField("Upload")
     
 class EditPostForm(FlaskForm):
     caption = StringField("New Caption")    

@@ -21,7 +21,7 @@
             width: 100%; 
             justify-content: center; 
             padding: 0.625em; 
-            margin: 0.75em 0; 
+            margin: 1.25em 0; 
             background-color: white;
         }
 
@@ -59,6 +59,13 @@
             text-decoration: none;
         }
 
+        a#editPostBtn{
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+        }
+
         div.form {
             margin-top: 1.5em;
             padding: 0.5em;
@@ -85,6 +92,16 @@
             font-size: 1.25em;
             color: rgb(25, 125, 125);
             padding: 0.5em;
+        }
+
+        button.btn.btn-outline-danger{
+            font-size: 1.25em;
+            color: rgb(25, 125, 125);
+            padding: 0.5em;
+            margin: 0.5em auto;
+            border-radius: 0.625em;
+            border: 0.0625em solid #6d6868;
+            font-family: inherit;
         }
 
         form>div.submit>small{
@@ -129,11 +146,12 @@
 
         div.post-container>div.post div.caption {
             display: flex;
-            justify-content: flex-start;
-            align-items: center;
+            justify-content: center;
+            align-items: baseline;
         }
 
-        div.post-container>div.post div.caption>h3 {
+        div.post-container>div.post div.caption>a {
+            text-decoration: none;
             margin-right: 0.5em;
             color: rgb(25, 125, 125);
         }
@@ -167,6 +185,7 @@
             justify-content: flex-start;
             align-items: center;
             border: 0.0625em solid black;
+            margin-top: 1.25em;
         }
 
         .image-item {
@@ -174,6 +193,7 @@
             margin: 0.625em;
             height: 10.5em;
             display: flex;
+            position: relative;
             justify-content: center;
             box-sizing: border-box;
             overflow: hidden;
@@ -187,6 +207,12 @@
             height: 10.5em;
             height: auto;
             display: block;
+        }
+
+        .profile-container{
+            width: 34.375em;
+            margin: 2em auto 0 auto;
+            text-align: center;
         }
 
         .profile-card {
@@ -252,7 +278,7 @@
             padding: 0;
         }
 
-        .post-header a, h2 {
+        .post-header a {
             text-decoration: none;
             color: rgb(25, 125, 125);
             margin: 0 0 0 0.25em;
