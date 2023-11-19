@@ -193,7 +193,7 @@ def like():
 
     updated_like_count = Like.query.filter_by(post_id=post_id).count()
 
-    return jsonify({"status": not bool(like), "likeCount": updated_like_count})
+    return make_response(jsonify({"status": not bool(like), "likeCount": updated_like_count}))
 
 if __name__ == '__main__':
     app.run(debug=True)
