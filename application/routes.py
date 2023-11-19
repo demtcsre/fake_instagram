@@ -36,9 +36,12 @@ def signup():
             username = form.username.data,
             fullname = form.fullname.data,
             email = form.email.data,
-            profile_pic = save_image(form.profile_pic.data, pfp=True),
             password = form.password.data
         )
+        if user.profile_pic == None:
+            user.profile_pic = "images/profile_pics/default.jpg"
+        else:
+            user.profile_pic = save_image(form.profile_pic.data, pfp=True)
         db.session.add(user)
         db.session.commit()
         flash('Account has been made', 'success')
